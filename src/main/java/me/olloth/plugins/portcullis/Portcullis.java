@@ -9,8 +9,6 @@ import me.olloth.plugins.portcullis.listeners.PortWeather;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,10 +23,12 @@ public class Portcullis extends JavaPlugin {
 	PortPlayers players;
 	Blocks blocks;
 
+	@Override
 	public void onDisable() {
 		System.out.println(this + " is now disabled!");
 	}
 
+	@Override
 	public void onEnable() {
 		instance = this;
 
@@ -40,11 +40,10 @@ public class Portcullis extends JavaPlugin {
 		weathers = new PortWeather(this);
 		players = new PortPlayers(this);
 
-		pm.registerEvent(Type.CUSTOM_EVENT, spouts, Priority.Low, this);
-		pm.registerEvent(Type.ENTITY_DAMAGE, entities, Priority.Low, this);
-		pm.registerEvent(Type.WEATHER_CHANGE, weathers, Priority.Low, this);
-		pm.registerEvent(Type.PLAYER_TOGGLE_SNEAK, players, Priority.Low, this);
-		pm.registerEvent(Type.PLAYER_PICKUP_ITEM, players, Priority.Low, this);
+		pm.registerEvents(entities, this);
+		pm.registerEvents(players, this);
+		pm.registerEvents(spouts, this);
+		pm.registerEvents(weathers, this);
 
 		System.out.println(this + " is now enabled!");
 	}
@@ -55,8 +54,9 @@ public class Portcullis extends JavaPlugin {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
+	public boolean onCommand(CommandSender sender, Command command,
+			String label, String[] args) {
+
 		return super.onCommand(sender, command, label, args);
 	}
 }
